@@ -4,8 +4,9 @@ Self-contained copy-and-paste code snippets.
 
 1. [Cache Function Outputs](#cache-function-outputs)
 2. [Time a Function](#time-a-function)
+3. [Install Google Chrome](#install-google-chrome)
 
-## Cache Function Outputs<a id="cache-function-outputs"></a>
+## Cache Function Outputs
 
 ```python
 def cacheit(maxsize=None, verbose=False):
@@ -25,7 +26,7 @@ def cacheit(maxsize=None, verbose=False):
     return cache_decorator
 ```
 
-## Time a Function<a id="time-a-function"></a>
+## Time a Function
 
 ```python
 def timeit(func):
@@ -46,4 +47,19 @@ def timeit(func):
         print(f"{func.__name__} executed in {time_string}")
         return result
     return wrapper
+```
+
+## Install Google Chrome
+
+```python
+def install_chrome(version: str = "current"):
+    import requests, subprocess
+    url = f"https://dl.google.com/linux/direct/google-chrome-stable_{version}_amd64.deb"
+    with open("/tmp/google-chrome.deb", "wb") as file:
+        [file.write(chunk) for chunk in requests.get(url, stream=True).iter_content(chunk_size=8192)]
+    if subprocess.run(f"dpkg --install /tmp/google-chrome.deb", shell=True).returncode != 0:
+        subprocess.run("sudo apt-get --yes --fix-broken install", shell=True, check=True)
+    print(subprocess.check_output("google-chrome --version", shell=True, text=True))
+
+install_chrome("current")
 ```
