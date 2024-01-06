@@ -5,6 +5,7 @@ Self-contained copy-and-paste code snippets.
 1. [Cache Function Outputs](#cache-function-outputs)
 1. [Time a Function](#time-a-function)
 1. [Install Google Chrome](#install-google-chrome)
+1. [Install ChromeDriver](#install-chromedriver)
 1. [Google Colab Terminal](#google-colab-terminal)
 
 ## Cache Function Outputs
