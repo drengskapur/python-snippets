@@ -11,16 +11,16 @@ Self-contained copy-and-paste code snippets.
 def cacheit(maxsize=None, verbose=False):
     import functools
     def cache_decorator(func):
+        cached_func = functools.lru_cache(maxsize=maxsize)(func)
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            before_misses = wrapper.cache_info().misses
-            result = wrapper.cached_func(*args, **kwargs)
-            if verbose and wrapper.cache_info().misses == before_misses:
+            before_misses = cached_func.cache_info().misses
+            result = cached_func(*args, **kwargs)
+            if verbose and cached_func.cache_info().misses == before_misses:
                 print(f"HIT! {func.__name__}")
             elif verbose:
                 print(f"MISS! {func.__name__}")
             return result
-        wrapper.cached_func = functools.lru_cache(maxsize=maxsize)(func)
         return wrapper
     return cache_decorator
 ```
