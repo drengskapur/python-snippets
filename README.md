@@ -2,10 +2,19 @@
 
 Self-contained copy-and-paste code snippets.
 
+Python Decorators
+
 1. [Cache Function Outputs](#cache-function-outputs)
 1. [Time a Function](#time-a-function)
+
+Installers
+
 1. [Install Google Chrome](#install-google-chrome)
 1. [Install ChromeDriver](#install-chromedriver)
+1. [Install Firefox](#install-firefox)
+
+Google Colab
+
 1. [Google Colab Terminal](#google-colab-terminal)
 
 ## Cache Function Outputs
@@ -107,4 +116,20 @@ def install_chromedriver(version: str = None):
 install_chromedriver()
 ```
 
+## Install Firefox
 
+```python
+def install_firefox():
+    import shutil, subprocess
+    subprocess.run("sudo add-apt-repository ppa:mozillateam/ppa --yes", shell=True, check=True)
+    with open("/etc/apt/preferences.d/mozilla-firefox", mode="w") as file:
+        file.write("Package: *\nPin: release o=LP-PPA-mozillateam\nPin-Priority: 1001")
+    with open("/etc/apt/apt.conf.d/51unattended-upgrades-firefox", "w") as file:
+        file.write('Unattended-Upgrade::Allowed-Origins:: "LP-PPA-mozillateam:${distro_codename}";')
+    subprocess.run("sudo apt-get update", shell=True, check=True)
+    subprocess.run("sudo apt-get --yes install firefox", shell=True, check=True)
+    print(shutil.which("firefox"))
+    print(subprocess.check_output(f"/usr/bin/firefox --version", shell=True, text=True))
+
+install_firefox()
+```
