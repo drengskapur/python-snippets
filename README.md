@@ -70,31 +70,15 @@ def timeit(func):
 
 ## Install Google Chrome
 
-### Debian
-
-```bash
-#!/usr/bin/env bash
-sudo apt-get update -q > /dev/null
-sudo apt-get install -y -qq curl
-curl -sS https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor | sudo tee /usr/share/keyrings/google-chrome.gpg >/dev/null
-echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list >/dev/null
-sudo apt-get update -q > /dev/null
-sudo apt-get install -y -qq google-chrome-stable
-which google-chrome
-google-chrome --version
-```
-
-### Python
-
 ```python
 def install_chrome(version: str = "current"):
-    import requests, shutil, subprocess, tempfile
+    import pathlib, requests, shutil, subprocess, tempfile
     with tempfile.TemporaryDirectory() as temp_dir:
-        install_path = f"{temp_dir}/google-chrome.deb"
+        install_path = pathlib.Path(temp_dir) / "google-chrome.deb"
         url = f"https://dl.google.com/linux/direct/google-chrome-stable_{version}_amd64.deb"
         response = requests.get(url, stream=True)
         response.raise_for_status()
-        with open(install_path, mode="wb") as file:
+        with install_path.open(mode="wb") as file:
             for chunk in response.iter_content(chunk_size=8192):
                 file.write(chunk)
         result = subprocess.run(f"dpkg --install {install_path}", shell=True)
@@ -103,41 +87,26 @@ def install_chrome(version: str = "current"):
         print(shutil.which("google-chrome"))
         print(subprocess.check_output("google-chrome --version", shell=True, text=True))
 
+
 install_chrome()
 ```
 
 ## Install ChromeDriver
 
-### Debian
-
-```bash
-#!/usr/bin/env bash
-sudo apt-get install -y -qq unzip curl
-CHROME_DRIVER_VERSION=$(curl -sS "http://chromedriver.storage.googleapis.com/LATEST_RELEASE")
-curl -sSo /tmp/chromedriver_linux64.zip "http://chromedriver.storage.googleapis.com/${CHROME_DRIVER_VERSION}/chromedriver_linux64.zip"
-sudo unzip -o /tmp/chromedriver_linux64.zip -d /usr/bin >/dev/null
-rm /tmp/chromedriver_linux64.zip 
-sudo chmod 755 /usr/bin/chromedriver 
-which chromedriver
-chromedriver -v
-```
-
-### Python
-
 ```python
 def install_chromedriver(version: str = None):
-    import os, requests, shutil, subprocess, tempfile, zipfile
-    chromedriver_path = "/usr/bin/chromedriver"
+    import os, pathlib, requests, shutil, subprocess, tempfile, zipfile
+    chromedriver_path = pathlib.Path("/usr/bin/chromedriver")
     url = "https://chromedriver.storage.googleapis.com"
     if not version:
         response = requests.get(f"{url}/LATEST_RELEASE")
         response.raise_for_status()
         version = response.text
     with tempfile.TemporaryDirectory() as temp_dir:
-        install_path = f"/{temp_dir}/chromedriver_linux64.zip"
+        install_path = pathlib.Path(temp_dir) / "chromedriver_linux64.zip"
         response = requests.get(f"{url}/{version}/chromedriver_linux64.zip")
         response.raise_for_status()
-        with open(install_path, mode="wb") as file:
+        with install_path.open(mode="wb") as file:
             file.write(response.content)
         with zipfile.ZipFile(install_path, mode="r") as zip_ref:
             zip_ref.extractall(path="/usr/bin")
