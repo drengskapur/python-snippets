@@ -1,6 +1,6 @@
-# Snippets
+# Python Snippets
 
-Self-contained copy-and-paste code snippets.
+Self-contained copy-and-paste Python code snippets.
 
 Python Decorators
 
