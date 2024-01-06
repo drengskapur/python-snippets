@@ -60,14 +60,6 @@ def timeit(func):
     return wrapper
 ```
 
-## Google Colab Terminal
-
-```python
-%pip install --quiet --progress-bar off colab-xterm
-%reload_ext colabxterm
-%xterm
-```
-
 ## Install Google Chrome
 
 ```python
@@ -133,4 +125,12 @@ def install_firefox():
     print(subprocess.check_output(f"/usr/bin/firefox --version", shell=True, text=True))
 
 install_firefox()
+```
+
+## Google Colab Terminal
+
+```python
+%pip install --quiet --progress-bar off colab-xterm
+%reload_ext colabxterm
+%xterm
 ```
