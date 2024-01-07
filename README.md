@@ -105,7 +105,6 @@ def install_chrome(version=None):
     response = requests.get(json_url)
     response.raise_for_status()
     data = response.json()
-
     # FETCH LATEST VERSION IF NO VERSION SPECIFIED ELSE FETCH SPECIFIED VERSION
     version = version.split(".")[0] if version else max(data["milestones"].keys(), key=int)
     downloads = data["milestones"][version]["downloads"]["chrome"]
@@ -149,7 +148,6 @@ install_chrome()
 ```python
 def install_chromedriver(version=None):
     import os, pathlib, platform, shutil, subprocess, requests, tempfile, zipfile
-
     platform_config = {
         ("linux", "x86_64"): {
             "platform_key": "linux64",
@@ -188,7 +186,6 @@ def install_chromedriver(version=None):
     response = requests.get(json_url)
     response.raise_for_status()
     data = response.json()
-
     # FETCH LATEST VERSION IF NO VERSION SPECIFIED ELSE FETCH SPECIFIED VERSION
     version = version.split(".")[0] if version else max(data["milestones"].keys(), key=int)
     downloads = data["milestones"][version]["downloads"]["chromedriver"]
