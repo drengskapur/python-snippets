@@ -71,7 +71,7 @@ def install_chrome(version=None):
         ("linux", "x86_64"): {
             "platform_key": "linux64",
             "extracted_path_relative": "chrome-linux64/chrome",
-            "chrome_file_path": "/usr/bin/chrome",
+            "chrome_file_path": "/usr/local/bin/chrome",
         },
         ("darwin", "arm64"): {
             "platform_key": "mac-arm64",
@@ -153,17 +153,17 @@ def install_chromedriver(version=None):
         ("linux", "x86_64"): {
             "platform_key": "linux64",
             "extracted_path_relative": "chromedriver-linux64/chromedriver",
-            "chromedriver_file_path": "/usr/bin/chromedriver"
+            "chromedriver_file_path": "/usr/local/bin/chromedriver"
         },
         ("darwin", "arm64"): {
             "platform_key": "mac-arm64",
             "extracted_path_relative": "chromedriver-mac-arm64/chromedriver",
-            "chromedriver_file_path": "/usr/bin/chromedriver"
+            "chromedriver_file_path": "/usr/local/bin/chromedriver"
         },
         ("darwin", "x86_64"): {
             "platform_key": "mac-x64",
             "extracted_path_relative": "chromedriver-mac-x64/chromedriver",
-            "chromedriver_file_path": "/usr/bin/chromedriver"
+            "chromedriver_file_path": "/usr/local/bin/chromedriver"
         },
         ("windows", "AMD64"): {
             "platform_key": "win64",
