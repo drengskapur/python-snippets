@@ -212,7 +212,7 @@ install_firefox()
 
 ## Install GeckoDriver
 
-```
+```python
 def install_geckodriver():
     import os, requests, shutil, subprocess, tarfile, tempfile
     api_url = "https://api.github.com/repos/mozilla/geckodriver/releases/latest"
