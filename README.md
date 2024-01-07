@@ -18,6 +18,7 @@ Installers
 Google Colab
 
 1. [Google Colab Terminal](#google-colab-terminal)
+1. [Run Docker Inside Colab](#run-docker-inside-colab)
 
 ## Cache Function Outputs
 
