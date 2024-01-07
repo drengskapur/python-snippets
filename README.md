@@ -67,33 +67,32 @@ def timeit(func):
 ```python
 def install_chrome(version=None):
     import os, pathlib, platform, shutil, subprocess, requests, tempfile, zipfile
-
     platform_config = {
         ("linux", "x86_64"): {
             "platform_key": "linux64",
             "extracted_path_relative": "chrome-linux64/chrome",
-            "chrome_file_path": "/opt/google/chrome/chrome"
+            "chrome_file_path": "/usr/bin/chrome",
         },
         ("darwin", "arm64"): {
             "platform_key": "mac-arm64",
             "extracted_path_relative": "chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing",
-            "chrome_file_path": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+            "chrome_file_path": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
         },
         ("darwin", "x86_64"): {
             "platform_key": "mac-x64",
             "extracted_path_relative": "chrome-mac-x64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing",
-            "chrome_file_path": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+            "chrome_file_path": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
         },
         ("windows", "AMD64"): {
             "platform_key": "win64",
             "extracted_path_relative": "chrome-win64/chrome.exe",
-            "chrome_file_path": os.path.join(os.environ.get('PROGRAMFILES', 'C:\\Program Files'), 'Google', 'Chrome', 'Application', 'chrome.exe')
+            "chrome_file_path": os.path.join(os.environ.get("PROGRAMFILES", "C:\\Program Files"), "Google", "Chrome", "Application", "chrome.exe"),
         },
         ("windows", "x86"): {
             "platform_key": "win32",
             "extracted_path_relative": "chrome-win32/chrome.exe",
-            "chrome_file_path": os.path.join(os.environ.get('PROGRAMFILES(x86)', 'C:\\Program Files (x86)'), 'Google', 'Chrome', 'Application', 'chrome.exe')
-        }
+            "chrome_file_path": os.path.join(os.environ.get("PROGRAMFILES(x86)", "C:\\Program Files (x86)"), "Google", "Chrome", "Application", "chrome.exe"),
+        },
     }
     os_name = platform.system().lower()
     arch = platform.machine()
@@ -107,12 +106,8 @@ def install_chrome(version=None):
     response.raise_for_status()
     data = response.json()
 
-    if version is None:
-        # GET LATEST
-        version = max(data["milestones"].keys(), key=int)
-    else:
-        version = version.split(".")[0]
-
+    # FETCH LATEST VERSION IF NO VERSION SPECIFIED ELSE FETCH SPECIFIED VERSION
+    version = version.split(".")[0] if version else max(data["milestones"].keys(), key=int)
     downloads = data["milestones"][version]["downloads"]["chrome"]
     download_url = next(download["url"] for download in downloads if download["platform"] == config["platform_key"])
 
@@ -142,25 +137,8 @@ def install_chrome(version=None):
         # SET EXECUTE FLAG FOR LINUX MACHINES
         if os_name == "linux":
             subprocess.run(["chmod", "+x", str(chrome_file_path)], check=True)
+            print(shutil.which("chrome"))
 
-        # UPDATE PATH
-        if os_name in ["linux", "darwin"]:
-            symlink_path = pathlib.Path("/usr/local/bin/chrome")
-            if symlink_path.exists():
-                symlink_path.unlink()
-            symlink_path.symlink_to(chrome_file_path)
-        elif os_name == "windows":
-            import winreg
-            chrome_dir = str(chrome_file_path.parent)
-            key_path = winreg.HKEY_LOCAL_MACHINE
-            sub_key = "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"
-            with winreg.OpenKey(key_path, sub_key, 0, winreg.KEY_ALL_ACCESS) as key:
-                current_path, _ = winreg.QueryValueEx(key, "Path")
-                current_path = current_path.strip()
-                if chrome_dir.lower() not in current_path.lower():
-                    new_path = (current_path + ";" + chrome_dir) if current_path else chrome_dir
-                    winreg.SetValueEx(key, "Path", 0, winreg.REG_EXPAND_SZ, new_path)
-        print(f"{chrome_file_path}")
         print(subprocess.check_output(f"{chrome_file_path} --version", shell=True).decode().strip())
 
 install_chrome()
@@ -169,25 +147,82 @@ install_chrome()
 ## Install ChromeDriver
 
 ```python
-def install_chromedriver(version: str = None):
-    import os, pathlib, requests, shutil, subprocess, tempfile, zipfile
-    chromedriver_path = pathlib.Path("/usr/bin/chromedriver")
-    url = "https://chromedriver.storage.googleapis.com"
-    if not version:
-        response = requests.get(f"{url}/LATEST_RELEASE")
-        response.raise_for_status()
-        version = response.text
+def install_chromedriver(version=None):
+    import os, pathlib, platform, shutil, subprocess, requests, tempfile, zipfile
+
+    platform_config = {
+        ("linux", "x86_64"): {
+            "platform_key": "linux64",
+            "extracted_path_relative": "chromedriver-linux64/chromedriver",
+            "chromedriver_file_path": "/usr/bin/chromedriver"
+        },
+        ("darwin", "arm64"): {
+            "platform_key": "mac-arm64",
+            "extracted_path_relative": "chromedriver-mac-arm64/chromedriver",
+            "chromedriver_file_path": "/usr/bin/chromedriver"
+        },
+        ("darwin", "x86_64"): {
+            "platform_key": "mac-x64",
+            "extracted_path_relative": "chromedriver-mac-x64/chromedriver",
+            "chromedriver_file_path": "/usr/bin/chromedriver"
+        },
+        ("windows", "AMD64"): {
+            "platform_key": "win64",
+            "extracted_path_relative": "chromedriver-win64/chromedriver.exe",
+            "chromedriver_file_path": "C:\\Windows\\chromedriver.exe"
+        },
+        ("windows", "x86"): {
+            "platform_key": "win32",
+            "extracted_path_relative": "chromedriver-win32/chromedriver.exe",
+            "chromedriver_file_path": "C:\\Windows\\chromedriver.exe"
+        }
+    }
+    os_name = platform.system().lower()
+    arch = platform.machine()
+    config = platform_config.get((os_name, arch))
+    if not config:
+        raise ValueError(f"UNSUPPORTED PLATFORM OR ARCHITECTURE: {os_name} {arch}")
+
+    # FETCH DOWNLOAD URL
+    json_url = "https://googlechromelabs.github.io/chrome-for-testing/latest-versions-per-milestone-with-downloads.json"
+    response = requests.get(json_url)
+    response.raise_for_status()
+    data = response.json()
+
+    # FETCH LATEST VERSION IF NO VERSION SPECIFIED ELSE FETCH SPECIFIED VERSION
+    version = version.split(".")[0] if version else max(data["milestones"].keys(), key=int)
+    downloads = data["milestones"][version]["downloads"]["chromedriver"]
+    download_url = next(download["url"] for download in downloads if download["platform"] == config["platform_key"])
+
+    # DOWNLOAD CHROMEDRIVER ZIP FILE
     with tempfile.TemporaryDirectory() as temp_dir:
-        install_path = pathlib.Path(temp_dir) / "chromedriver_linux64.zip"
-        response = requests.get(f"{url}/{version}/chromedriver_linux64.zip")
-        response.raise_for_status()
-        with install_path.open(mode="wb") as file:
-            file.write(response.content)
-        with zipfile.ZipFile(install_path, mode="r") as zip_ref:
-            zip_ref.extractall(path="/usr/bin")
-        os.chmod(chromedriver_path, mode=0o755)
-        print(shutil.which("chromedriver"))
-        print(subprocess.check_output(f"{chromedriver_path} --version", shell=True, text=True))
+        temp_dir = pathlib.Path(temp_dir)
+        chromedriver_zip = temp_dir / f"chromedriver-{config['platform_key']}.zip"
+        with requests.get(download_url, stream=True) as r:
+            r.raise_for_status()
+            with open(chromedriver_zip, "wb") as f:
+                for chunk in r.iter_content(chunk_size=8192):
+                    f.write(chunk)
+
+        with zipfile.ZipFile(chromedriver_zip, "r") as zip_ref:
+            zip_ref.extractall(temp_dir)
+        extracted_path_absolute = temp_dir / config["extracted_path_relative"]
+
+        # ENSURE DESTINATION PATH
+        chromedriver_file_path = pathlib.Path(config["chromedriver_file_path"])
+        if chromedriver_file_path.exists():
+            chromedriver_file_path.unlink()
+        chromedriver_file_path.parent.mkdir(parents=True, exist_ok=True)
+
+        # MOVE EXECUTABLE TO DESTINATION PATH
+        shutil.move(str(extracted_path_absolute), str(chromedriver_file_path))
+
+        # SET EXECUTE FLAG FOR LINUX MACHINES
+        if os_name == "linux":
+            subprocess.run(["chmod", "+x", str(chromedriver_file_path)], check=True)
+            print(shutil.which("chromedriver"))
+
+        print(subprocess.check_output(f"{chromedriver_file_path} --version", shell=True).decode().strip())
 
 install_chromedriver()
 ```
