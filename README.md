@@ -105,6 +105,7 @@ def install_chrome(version=None):
     response = requests.get(json_url)
     response.raise_for_status()
     data = response.json()
+
     # FETCH LATEST VERSION IF NO VERSION SPECIFIED ELSE FETCH SPECIFIED VERSION
     version = version.split(".")[0] if version else max(data["milestones"].keys(), key=int)
     downloads = data["milestones"][version]["downloads"]["chrome"]
@@ -136,8 +137,8 @@ def install_chrome(version=None):
         # SET EXECUTE FLAG FOR LINUX MACHINES
         if os_name == "linux":
             subprocess.run(["chmod", "+x", str(chrome_file_path)], check=True)
-            print(shutil.which("chrome"))
 
+        print(chrome_file_path)
         print(subprocess.check_output(f"{chrome_file_path} --version", shell=True).decode().strip())
 
 install_chrome()
@@ -217,8 +218,8 @@ def install_chromedriver(version=None):
         # SET EXECUTE FLAG FOR LINUX MACHINES
         if os_name == "linux":
             subprocess.run(["chmod", "+x", str(chromedriver_file_path)], check=True)
-            print(shutil.which("chromedriver"))
 
+        print(chromedriver_file_path)
         print(subprocess.check_output(f"{chromedriver_file_path} --version", shell=True).decode().strip())
 
 install_chromedriver()
