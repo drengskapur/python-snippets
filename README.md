@@ -19,6 +19,7 @@ Google Colab
 
 1. [Google Colab Terminal](#google-colab-terminal)
 1. [Run Docker Inside Colab](#run-docker-inside-colab)
+1. [Symlink Google Drive Folder to Files Pane](#symlink-google-drive-folder-to-files-pane)
 
 ## Cache Function Outputs
 
@@ -335,4 +336,27 @@ install_vscode_server()
 %pip install --quiet --progress-bar off colab-xterm
 %reload_ext colabxterm
 %xterm
+```
+
+## Symlink Google Drive Folder to Files Pane 
+
+```python
+# @title {display-mode:"form"}
+# @markdown <br/><center><img src="https://1000logos.net/wp-content/uploads/2021/04/Google-Drive-logo.png" height="100"></center>
+# @markdown <center><h1>Symlink Google Drive Folder</h1></center>
+# @markdown <center><h1>to Files Pane</h1></center><br/>
+def setup_drive_folder():
+    import google.colab, pathlib
+    google_drive_folder = "temp"  # @param { type: "string" }
+    if not google_drive_folder:
+        google_drive_folder = "untitled"
+    google.colab.drive.mount("/content/drive", force_remount=True)
+    drive_path = pathlib.Path("/content/drive/My Drive/Colab Notebooks")
+    project_path = drive_path / folder_name
+    shortcut = pathlib.Path(f"/content/{folder_name}")
+    project_path.mkdir(parents=True, exist_ok=True)
+    if not shortcut.exists():
+        shortcut.symlink_to(project_path)
+
+setup_drive_folder(FOLDER)
 ```
