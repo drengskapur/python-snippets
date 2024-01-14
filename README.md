@@ -67,7 +67,7 @@ def timeit(func):
 
 ## Checksum Utilities
 
-```
+```python
 def calculate_checksum(filepath: str, hash_func):
     with open(filepath, "rb") as f:
         while chunk := f.read(8192):
