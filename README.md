@@ -6,6 +6,7 @@ Python Decorators
 
 1. [Cache Function Outputs](#cache-function-outputs)
 1. [Time a Function](#time-a-function)
+1. [Checksum Utilities](#checksum-utilities)
 
 Installers
 
@@ -62,6 +63,43 @@ def timeit(func):
         print(f"{func.__name__} executed in {time_string}")
         return result
     return wrapper
+```
+
+## Checksum Utilities
+
+```
+def calculate_checksum(filepath: str, hash_func):
+    with open(filepath, "rb") as f:
+        while chunk := f.read(8192):
+            hash_func.update(chunk)
+    return hash_func.hexdigest()
+
+def create_checksum_file(filepaths: List[str], checksum_filename:str, hash_func):
+    import hashlib
+    with open(checksum_filename, "w") as checksum_file:
+        for filepath in filepaths:
+            checksum = calculate_checksum(filepath, hashlib.sha256())
+            checksum_line = f"{checksum} {filepath}\n"
+            print(checksum_line)
+            checksum_file.write(checksum_line)
+
+    print(checksum_filename)
+    return checksum_filename
+
+def verify_checksums(checksum_filename):
+    import hashlib
+    result = True
+    with open(checksum_filename, "r") as checksum_file:
+        for line in checksum_file:
+            stored_checksum, filepath = line.strip().split()
+            current_checksum = calculate_checksum(filepath, hashlib.sha256())
+            if current_checksum != stored_checksum:
+                print(f"ERROR: CHECKSUM DOES NOT MATCH FOR: {filepath}")
+                result = False
+            else:
+                print(f"CHECKSUM VERIFIED FOR: {filepath}")
+
+    return result
 ```
 
 ## Install Google Chrome
