@@ -75,10 +75,9 @@ def calculate_checksum(filepath: str, hash_func):
     return hash_func.hexdigest()
 
 def create_checksum_file(filepaths: List[str], checksum_filename:str, hash_func):
-    import hashlib
     with open(checksum_filename, "w") as checksum_file:
         for filepath in filepaths:
-            checksum = calculate_checksum(filepath, hashlib.sha256())
+            checksum = calculate_checksum(filepath, hash_func)
             checksum_line = f"{checksum} {filepath}\n"
             print(checksum_line)
             checksum_file.write(checksum_line)
@@ -87,12 +86,13 @@ def create_checksum_file(filepaths: List[str], checksum_filename:str, hash_func)
     return checksum_filename
 
 def verify_checksums(checksum_filename):
-    import hashlib
     result = True
     with open(checksum_filename, "r") as checksum_file:
+        import hashlib
+        hash_func = hashlib.sha256()
         for line in checksum_file:
             stored_checksum, filepath = line.strip().split()
-            current_checksum = calculate_checksum(filepath, hashlib.sha256())
+            current_checksum = calculate_checksum(filepath, hash_func)
             if current_checksum != stored_checksum:
                 print(f"ERROR: CHECKSUM DOES NOT MATCH FOR: {filepath}")
                 result = False
