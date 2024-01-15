@@ -401,7 +401,7 @@ SHORTCUT = setup_drive_folder(google_drive_folder)
 
 ## Alias
 
-```python
+```text
 %alias bracket echo "Input in brackets: <%l>"
 %bracket I'm in brackets!
 ```
