@@ -20,7 +20,8 @@ Google Colab
 
 1. [Google Colab Terminal](#google-colab-terminal)
 1. [Run Docker Inside Colab](#run-docker-inside-colab)
-1. [Symlink Google Drive Folder to Files Pane](#symlink-google-drive-folder-to-files-pane)
+1. [Create a Folder Shortcut to Google Drive Folder in the File Browser](#create-a-folder-shortcut-to-google-drive-folder-in-the-file-browser)
+1. [Alias](#alias)
 
 ## Cache Function Outputs
 
@@ -376,13 +377,9 @@ install_vscode_server()
 %xterm
 ```
 
-## Symlink Google Drive Folder to Files Pane 
+## Create a Folder Shortcut to Google Drive Folder in the File Browser
 
 ```python
-# @title {display-mode:"form"}
-# @markdown <br/><center><img src="https://1000logos.net/wp-content/uploads/2021/04/Google-Drive-logo.png" height="100"></center>
-# @markdown <center><h1>Symlink Google Drive Folder</h1></center>
-# @markdown <center><h1>to Files Pane</h1></center><br/>
 def setup_drive_folder(google_drive_folder):
     import contextlib, google.colab, os, pathlib 
     if not google_drive_folder:
@@ -400,4 +397,13 @@ def setup_drive_folder(google_drive_folder):
 
 google_drive_folder = "temp"  # @param { type: "string" }
 SHORTCUT = setup_drive_folder(google_drive_folder)
+```
+
+## Alias
+
+![image](https://github.com/drengskapur/python-snippets/assets/5193877/61386202-e21d-4bba-ae2c-8d4fd83e2026)
+
+```python
+%alias bracket echo "Input in brackets: <%l>"
+%bracket I'm in brackets!
 ```
