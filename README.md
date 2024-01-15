@@ -401,9 +401,10 @@ SHORTCUT = setup_drive_folder(google_drive_folder)
 
 ## Alias
 
-![image](https://github.com/drengskapur/python-snippets/assets/5193877/61386202-e21d-4bba-ae2c-8d4fd83e2026)
-
 ```python
 %alias bracket echo "Input in brackets: <%l>"
 %bracket I'm in brackets!
 ```
+
+<img src="https://github.com/drengskapur/python-snippets/assets/5193877/61386202-e21d-4bba-ae2c-8d4fd83e2026" width="400">
+
