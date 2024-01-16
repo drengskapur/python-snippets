@@ -15,6 +15,7 @@ Installers
 1. [Install Firefox](#install-firefox)
 1. [Install GeckoDriver](#install-geckodriver)
 1. [Install VS Code Server](#install-vs-code-server)
+1. [Install NodeJS](#install-nodejs)
 
 Google Colab
 
@@ -367,6 +368,21 @@ def install_vscode_server():
 
 
 install_vscode_server()
+```
+
+## Install NodeJS
+
+```python
+NODE_MAJOR = 21
+import os
+os.system("export DEBIAN_FRONTEND=noninteractive")
+os.system("sudo apt-get update")
+os.system("sudo apt-get install --yes ca-certificates curl gnupg")
+os.system("curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg")
+os.system(f'NODE_MAJOR={NODE_MAJOR} echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list')
+os.system("sudo apt-get update")
+os.system("sudo apt-get install nodejs -y")
+print(f"node {os.popen('node --version').read()}")
 ```
 
 ## Google Colab Terminal
