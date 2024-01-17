@@ -375,9 +375,6 @@ install_vscode_server()
 ```python
 def install_node():
     import os
-
-    # REMOVE SAMPLE DATA
-    !rm -rf /content/sample_data
     
     # REMOVE CONFLICTING INSTALLATIONS
     !rm -rf "$(which node)"
