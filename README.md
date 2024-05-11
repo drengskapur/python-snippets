@@ -405,15 +405,17 @@ install_node()
 
 ```python
 def setup_drive_folder(google_drive_folder):
-    import contextlib, google.colab, os, pathlib 
+    import contextlib, google.colab, os, pathlib
     if not google_drive_folder:
         google_drive_folder = "temp"
     with contextlib.redirect_stdout(open(os.devnull, 'w')):
         google.colab.drive.mount("/content/drive", force_remount=True)
-    drive_path = pathlib.Path("/content/drive/My Drive/Colab Notebooks")
-    project_path = drive_path / google_drive_folder
-    shortcut = pathlib.Path(f"/content/{google_drive_folder}")
+    drive_path = pathlib.Path("/content/drive/MyDrive")
+    colab_notebooks_path = drive_path / "Colab Notebooks"
+    project_path = colab_notebooks_path / google_drive_folder
     project_path.mkdir(parents=True, exist_ok=True)
+    shortcut = pathlib.Path(f"/content/{google_drive_folder}")
+    shortcut.parent.mkdir(parents=True, exist_ok=True)
     if not shortcut.exists():
         shortcut.symlink_to(project_path)
     print(f"SHORTCUT: {shortcut} --> {project_path}")
