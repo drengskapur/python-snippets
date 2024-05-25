@@ -28,6 +28,7 @@ Google Colab
 
 ```python
 #!/usr/bin/env python3
+
 import os
 import subprocess
 
@@ -36,10 +37,14 @@ SIZE_THRESHOLD = 100 * 1024 * 1024
 
 def track_large_files(directory):
     for root, dirs, files in os.walk(directory):
+        # Skip the .git directory
+        if '.git' in dirs:
+            dirs.remove('.git')
+
         for file in files:
             file_path = os.path.join(root, file)
             file_size = os.path.getsize(file_path)
-            
+
             if file_size > SIZE_THRESHOLD:
                 # Track the large file using Git LFS
                 subprocess.run(["git", "lfs", "track", file_path])
