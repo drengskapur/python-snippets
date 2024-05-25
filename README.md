@@ -24,6 +24,41 @@ Google Colab
 1. [Create a Folder Shortcut to Google Drive Folder in the File Browser](#create-a-folder-shortcut-to-google-drive-folder-in-the-file-browser)
 1. [Alias](#alias)
 
+## Git LFS Track Files Over 100MB
+
+```python
+#!/usr/bin/env python3
+import os
+import subprocess
+
+# Size threshold in bytes (100 MB)
+SIZE_THRESHOLD = 100 * 1024 * 1024
+
+def track_large_files(directory):
+    for root, dirs, files in os.walk(directory):
+        for file in files:
+            file_path = os.path.join(root, file)
+            file_size = os.path.getsize(file_path)
+            
+            if file_size > SIZE_THRESHOLD:
+                # Track the large file using Git LFS
+                subprocess.run(["git", "lfs", "track", file_path])
+                print(f"Tracked file: {file_path}")
+
+    # Commit the .gitattributes file
+    subprocess.run(["git", "add", ".gitattributes"])
+    subprocess.run(["git", "commit", "-m", "Configure Git LFS to track large files"])
+
+# Directory to scan for large files
+directory = "."
+
+# Initialize Git LFS
+subprocess.run(["git", "lfs", "install"])
+
+# Track large files
+track_large_files(directory)
+```
+
 ## Cache Function Outputs
 
 ```python
