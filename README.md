@@ -2,6 +2,10 @@
 
 Self-contained copy-and-paste Python code snippets.
 
+Utilities
+
+1. [Git LFS Track Files Over 100MB](#git-lfs-track-files-over-100mb)
+
 Python Decorators
 
 1. [Cache Function Outputs](#cache-function-outputs)
