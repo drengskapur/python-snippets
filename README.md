@@ -32,39 +32,63 @@ Google Colab
 
 ```python
 #!/usr/bin/env python3
-
-import os
 import subprocess
+from pathlib import Path
 
-# Size threshold in bytes (100 MB)
-SIZE_THRESHOLD = 100 * 1024 * 1024
+SKIP_LIST = [
+    ".git",
+    "build",
+    "venv",
+    ".venv",
+    "node_modules",
+]
+
+SIZE_THRESHOLD_IN_MB = 100
+CALCULATED_THRESHOLD = SIZE_THRESHOLD_IN_MB * 1024 * 1024
+
 
 def track_large_files(directory):
-    for root, dirs, files in os.walk(directory):
-        # Skip the .git directory
-        if '.git' in dirs:
-            dirs.remove('.git')
+    try:
+        for item in directory.iterdir():
+            if item.name in SKIP_LIST or item.is_symlink():
+                continue
 
-        for file in files:
-            file_path = os.path.join(root, file)
-            file_size = os.path.getsize(file_path)
+            if item.is_dir():
+                track_large_files(item)
+            elif item.is_file():
+                try:
+                    file_size = item.stat().st_size
+                except FileNotFoundError:
+                    print(f"File not found: {item}")
+                    continue
+                except PermissionError:
+                    print(f"Permission denied: {item}")
+                    continue
 
-            if file_size > SIZE_THRESHOLD:
-                # Track the large file using Git LFS
-                subprocess.run(["git", "lfs", "track", file_path])
-                print(f"Tracked file: {file_path}")
+                if file_size > CALCULATED_THRESHOLD:
+                    try:
+                        subprocess.run(["git", "lfs", "track", str(item)], check=True)
+                        print(f"Tracked file: {item}")
+                    except subprocess.CalledProcessError as e:
+                        print(f"Error tracking file: {item}")
+                        print(f"Error message: {e}")
+    except PermissionError:
+        print(f"Permission denied: {directory}")
+    except FileNotFoundError:
+        print(f"Directory not found: {directory}")
 
-    # Commit the .gitattributes file
-    subprocess.run(["git", "add", ".gitattributes"])
-    subprocess.run(["git", "commit", "-m", "Configure Git LFS to track large files"])
 
-# Directory to scan for large files
-directory = "."
+def install_git_lfs():
+    try:
+        subprocess.run(["git", "lfs", "install"], check=True)
+    except subprocess.CalledProcessError as e:
+        print("Error installing Git LFS")
+        print(f"Error message: {e}")
+        exit(1)
 
-# Initialize Git LFS
-subprocess.run(["git", "lfs", "install"])
 
-# Track large files
+directory = Path(".")
+install_git_lfs()
 track_large_files(directory)
 ```
 
