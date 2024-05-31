@@ -27,8 +27,8 @@ Google Colab
 AutoML
 
 1. [Install autogluon on Google Colab](#install-autogluon-on-google-colab)
-1. [Install auto-sklearn on Google Colab](#install-auto-sklearn-on-google-colab)
-1. [Install tpot 0.12.2 on Google Colab](#install-tpot-0122-on-google-colab) 
+1. [Install auto-sklearn 0.15.0  on Google Colab](#install-auto-sklearn-0150-on-google-colab)
+1. [Install tpot on Google Colab](#install-tpot-0122-on-google-colab) 
 
 ## Git LFS Track Files Over 100MB
 
