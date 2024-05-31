@@ -5,11 +5,8 @@ Self-contained copy-and-paste Python code snippets.
 Utilities
 
 1. [Git LFS Track Files Over 100MB](#git-lfs-track-files-over-100mb)
-
-Python Decorators
-
 1. [Cache Function Outputs](#cache-function-outputs)
-1. [Time a Function](#time-a-function)
+1. [Time a Function](#time-a-function) 
 1. [Checksum Utilities](#checksum-utilities)
 
 Installers
@@ -17,16 +14,21 @@ Installers
 1. [Install Google Chrome](#install-google-chrome)
 1. [Install ChromeDriver](#install-chromedriver)
 1. [Install Firefox](#install-firefox)
-1. [Install GeckoDriver](#install-geckodriver)
+1. [Install GeckoDriver](#install-geckodriver) 
 1. [Install VS Code Server](#install-vs-code-server)
 1. [Install Node](#install-node)
 
 Google Colab
 
 1. [Google Colab Terminal](#google-colab-terminal)
-1. [Run Docker Inside Colab](#run-docker-inside-colab)
 1. [Create a Folder Shortcut to Google Drive Folder in the File Browser](#create-a-folder-shortcut-to-google-drive-folder-in-the-file-browser)
-1. [Alias](#alias)
+1. [Alias](#alias)  
+
+AutoML
+
+1. [Install autogluon on Google Colab](#install-autogluon-on-google-colab)
+1. [Install tpot 0.12.2 on Google Colab](#install-tpot-0122-on-google-colab) 
+1. [Install auto-sklearn 0.15.0 on Google Colab](#install-auto-sklearn-0150-on-google-colab)
 
 ## Git LFS Track Files Over 100MB
 
@@ -502,3 +504,51 @@ SHORTCUT = setup_drive_folder(google_drive_folder)
 
 <img src="https://github.com/drengskapur/python-snippets/assets/5193877/61386202-e21d-4bba-ae2c-8d4fd83e2026" width="400">
 
+## Install autogluon on Google Colab
+
+```python
+# ---------------------------------------------------------------------------- #
+# @title Install autogluon on Google Colab { display-mode: "form" }
+# ---------------------------------------------------------------------------- #
+%pip install uv
+!git clone https://github.com/autogluon/autogluon.git
+!uv pip install --python=/usr/bin/python3 -e /content/autogluon/common/
+!uv pip install --python=/usr/bin/python3 -e /content/autogluon/core/[all]
+!uv pip install --python=/usr/bin/python3 -e /content/autogluon/features/
+!uv pip install --python=/usr/bin/python3 -e /content/autogluon/tabular/[all]
+!uv pip install --python=/usr/bin/python3 /content/autogluon/multimodal/
+!uv pip install --python=/usr/bin/python3 -e /content/autogluon/timeseries/[all]
+!uv pip install --python=/usr/bin/python3 -e /content/autogluon/eda/
+!uv pip install --python=/usr/bin/python3 -e /content/autogluon/autogluon/
+import IPython; IPython.display.clear_output()
+%pip list|grep autogluon|tr -s ' '
+# ---------------------------------------------------------------------------- #
+```
+
+## Install tpot 0.12.2 on Google Colab
+
+```python
+# ---------------------------------------------------------------------------- #
+# @title Install tpot 0.12.2 on Google Colab { display-mode: "form" }
+# ---------------------------------------------------------------------------- #
+%pip install uv
+!uv pip install --python=$(which python3) -r https://raw.githubusercontent.com/EpistasisLab/tpot/master/requirements.txt
+!uv pip install --python=$(which python3) tpot==0.12.2
+import IPython; IPython.display.clear_output()
+!uv pip list --python=$(which python3)|grep tpot|tr -s ' '
+# ---------------------------------------------------------------------------- #
+```
+## Install auto-sklearn 0.15.0 on Google Colab
+
+```python
+# ---------------------------------------------------------------------------- #
+# @title Install auto-sklearn 0.15.0 on Google Colab { display-mode: "form" }
+# ---------------------------------------------------------------------------- #
+%pip install uv
+!uv pip install --python=$(which python3) Cython==0.29.36 scipy==1.9 pyparsing==2.4
+!uv pip install --python=$(which python3) --no-build-isolation scikit-learn==0.24.2
+!uv pip install --python=$(which python3) auto-sklearn==0.15.0
+import IPython; IPython.display.clear_output()
+!uv pip list --python=$(which python3)|grep auto-sklearn|tr -s ' '
+# ---------------------------------------------------------------------------- #
+```
