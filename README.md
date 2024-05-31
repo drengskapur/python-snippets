@@ -512,14 +512,14 @@ SHORTCUT = setup_drive_folder(google_drive_folder)
 # ---------------------------------------------------------------------------- #
 %pip install uv
 !git clone https://github.com/autogluon/autogluon.git
-!uv pip install --python=/usr/bin/python3 -e /content/autogluon/common/
-!uv pip install --python=/usr/bin/python3 -e /content/autogluon/core/[all]
-!uv pip install --python=/usr/bin/python3 -e /content/autogluon/features/
-!uv pip install --python=/usr/bin/python3 -e /content/autogluon/tabular/[all]
-!uv pip install --python=/usr/bin/python3 /content/autogluon/multimodal/
-!uv pip install --python=/usr/bin/python3 -e /content/autogluon/timeseries/[all]
-!uv pip install --python=/usr/bin/python3 -e /content/autogluon/eda/
-!uv pip install --python=/usr/bin/python3 -e /content/autogluon/autogluon/
+!uv pip install --system -e /content/autogluon/common/
+!uv pip install --system -e /content/autogluon/core/[all]
+!uv pip install --system -e /content/autogluon/features/
+!uv pip install --system -e /content/autogluon/tabular/[all]
+!uv pip install --system -e /content/autogluon/multimodal/
+!uv pip install --system -e /content/autogluon/timeseries/[all]
+!uv pip install --system -e /content/autogluon/eda/
+!uv pip install --system -e /content/autogluon/autogluon/
 import IPython; IPython.display.clear_output()
 %pip list|grep autogluon|tr -s ' '
 # ---------------------------------------------------------------------------- #
