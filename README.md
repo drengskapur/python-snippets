@@ -538,6 +538,7 @@ import IPython; IPython.display.clear_output()
 !uv pip list --python=$(which python3)|grep tpot|tr -s ' '
 # ---------------------------------------------------------------------------- #
 ```
+
 ## Install auto-sklearn 0.15.0 on Google Colab
 
 ```python
