@@ -27,8 +27,8 @@ Google Colab
 AutoML
 
 1. [Install autogluon on Google Colab](#install-autogluon-on-google-colab)
+1. [Install auto-sklearn on Google Colab](#install-auto-sklearn-on-google-colab)
 1. [Install tpot 0.12.2 on Google Colab](#install-tpot-0122-on-google-colab) 
-1. [Install auto-sklearn 0.15.0 on Google Colab](#install-auto-sklearn-0150-on-google-colab)
 
 ## Git LFS Track Files Over 100MB
 
@@ -525,20 +525,6 @@ import IPython; IPython.display.clear_output()
 # ---------------------------------------------------------------------------- #
 ```
 
-## Install tpot 0.12.2 on Google Colab
-
-```python
-# ---------------------------------------------------------------------------- #
-# @title Install tpot 0.12.2 on Google Colab { display-mode: "form" }
-# ---------------------------------------------------------------------------- #
-%pip install uv
-!uv pip install --system -r https://raw.githubusercontent.com/EpistasisLab/tpot/master/requirements.txt
-!uv pip install --system tpot==0.12.2
-import IPython; IPython.display.clear_output()
-!uv pip list --system|grep tpot|tr -s ' '
-# ---------------------------------------------------------------------------- #
-```
-
 ## Install auto-sklearn 0.15.0 on Google Colab
 
 ```python
@@ -553,3 +539,19 @@ import IPython; IPython.display.clear_output()
 !uv pip list --system|grep auto-sklearn|tr -s ' '
 # ---------------------------------------------------------------------------- #
 ```
+
+## Install tpot on Google Colab
+
+```python
+# ---------------------------------------------------------------------------- #
+# @title Install tpot on Google Colab { display-mode: "form" }
+# ---------------------------------------------------------------------------- #
+%pip install uv
+!uv pip install --system -r https://raw.githubusercontent.com/EpistasisLab/tpot/master/requirements.txt
+!uv pip install --system tpot
+import IPython; IPython.display.clear_output()
+!uv pip list --system|grep tpot|tr -s ' '
+# ---------------------------------------------------------------------------- #
+```
+
+
