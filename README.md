@@ -532,10 +532,10 @@ import IPython; IPython.display.clear_output()
 # @title Install tpot 0.12.2 on Google Colab { display-mode: "form" }
 # ---------------------------------------------------------------------------- #
 %pip install uv
-!uv pip install --python=$(which python3) -r https://raw.githubusercontent.com/EpistasisLab/tpot/master/requirements.txt
-!uv pip install --python=$(which python3) tpot==0.12.2
+!uv pip install --system -r https://raw.githubusercontent.com/EpistasisLab/tpot/master/requirements.txt
+!uv pip install --system tpot==0.12.2
 import IPython; IPython.display.clear_output()
-!uv pip list --python=$(which python3)|grep tpot|tr -s ' '
+!uv pip list --system|grep tpot|tr -s ' '
 # ---------------------------------------------------------------------------- #
 ```
 
@@ -546,10 +546,10 @@ import IPython; IPython.display.clear_output()
 # @title Install auto-sklearn 0.15.0 on Google Colab { display-mode: "form" }
 # ---------------------------------------------------------------------------- #
 %pip install uv
-!uv pip install --python=$(which python3) Cython==0.29.36 scipy==1.9 pyparsing==2.4
-!uv pip install --python=$(which python3) --no-build-isolation scikit-learn==0.24.2
-!uv pip install --python=$(which python3) auto-sklearn==0.15.0
+!uv pip install --system Cython==0.29.36 scipy==1.9 pyparsing==2.4
+!uv pip install --system --no-build-isolation scikit-learn==0.24.2
+!uv pip install --system auto-sklearn==0.15.0
 import IPython; IPython.display.clear_output()
-!uv pip list --python=$(which python3)|grep auto-sklearn|tr -s ' '
+!uv pip list --system|grep auto-sklearn|tr -s ' '
 # ---------------------------------------------------------------------------- #
 ```
